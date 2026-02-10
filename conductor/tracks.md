@@ -10,5 +10,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: change the color of the cup to metallic gold.**
+- [x] **Track: change the color of the cup to metallic gold.**
 *Link: [./tracks/metallic_gold_bowl_20260210/](./tracks/metallic_gold_bowl_20260210/)*
