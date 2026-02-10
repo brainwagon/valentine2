@@ -8,15 +8,15 @@ This plan outlines the steps to implement smooth-shaded hearts, a bowl-shaped pl
     - [x] Verify visual appearance in scene (smooth vs. faceted).
 - [x] Task: Conductor - User Manual Verification 'Heart Visual Improvement' (Protocol in workflow.md) 5077b48
 
-## Phase 2: Bowl Platform Implementation
-- [ ] Task: Create Bowl Geometry and Visuals
-    - [ ] Replace flat box geometry with a `Three.SphereGeometry` (clipped) or custom lathe/shape to create a bowl.
-    - [ ] Position the bowl below the center of the screen.
-- [ ] Task: Implement High-Fidelity Bowl Physics
-    - [ ] Remove box collider for the platform.
-    - [ ] Create a Rapier Trimesh collider from the bowl's geometry data.
-    - [ ] Verify that hearts collide correctly with the interior of the bowl.
-- [ ] Task: Conductor - User Manual Verification 'Bowl Platform Implementation' (Protocol in workflow.md)
+## Phase 2: Bowl Platform Implementation [checkpoint: 131cbc2]
+- [x] Task: Create Bowl Geometry and Visuals 7aea94a
+    - [x] Replace flat box geometry with a `Three.SphereGeometry` (clipped) or custom lathe/shape to create a bowl.
+    - [x] Position the bowl below the center of the screen.
+- [x] Task: Implement High-Fidelity Bowl Physics 7aea94a
+    - [x] Remove box collider for the platform.
+    - [x] Create a Rapier Trimesh collider from the bowl's geometry data.
+    - [x] Verify that hearts collide correctly with the interior of the bowl.
+- [x] Task: Conductor - User Manual Verification 'Bowl Platform Implementation' (Protocol in workflow.md) 131cbc2
 
 ## Phase 3: Spawning Logic Update
 - [ ] Task: Update Spawning Frequency and Variance
