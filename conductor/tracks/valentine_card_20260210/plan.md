@@ -44,9 +44,9 @@ This plan outlines the steps to build the interactive Valentine's Day card.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Interactivity & Visual Effects' (Protocol in workflow.md) 038d532
 
 ## Phase 4: Audio & Polishing
-- [ ] Task: Add Ambient Music & SFX
-    - [ ] Integrate subtle ambient music.
-    - [ ] Add collision/spawn sound effects.
+- [x] Task: Add Ambient Music & SFX 6084c87
+    - [x] Integrate subtle ambient music.
+    - [x] Add collision/spawn sound effects.
 - [ ] Task: Final Polish & Responsive Fixes
     - [ ] Ensure the scene handles window resizing correctly.
     - [ ] Fine-tune physics parameters (friction, restitution) for "bouncy" hearts.
