@@ -3,10 +3,10 @@
 This plan outlines the steps to build the interactive Valentine's Day card.
 
 ## Phase 1: Project Foundation & Environment
-- [ ] Task: Set up basic HTML/CSS/JS structure
-    - [ ] Create `index.html` with basic layout and CDN links for Three.js and Rapier.
-    - [ ] Create `style.css` for typography and basic UI styling.
-    - [ ] Create `main.js` as the entry point.
+- [~] Task: Set up basic HTML/CSS/JS structure
+    - [~] Create `index.html` with basic layout and CDN links for Three.js and Rapier.
+    - [~] Create `style.css` for typography and basic UI styling.
+    - [~] Create `main.js` as the entry point.
 - [ ] Task: Initialize Three.js Scene
     - [ ] Set up Scene, Camera (Perspective), and Renderer.
     - [ ] Add OrbitControls for camera interaction.

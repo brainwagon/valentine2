@@ -1,0 +1,7 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; /* Whimsical font */
+    color: #fff;
+    user-select: none;
+}
