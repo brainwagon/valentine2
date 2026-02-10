@@ -63,7 +63,11 @@ export const Vector2 = jest.fn(() => ({ set: jest.fn() }));
 export const AdditiveBlending = 1;
 export const AudioListener = jest.fn(() => ({
     position: { set: jest.fn() },
-    rotation: { set: jest.fn() }
+    rotation: { set: jest.fn() },
+    context: { 
+        state: 'suspended', 
+        resume: jest.fn(function() { this.state = 'running'; }) 
+    }
 }));
 export const Audio = jest.fn(() => ({
     setBuffer: jest.fn(),

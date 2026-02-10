@@ -11,11 +11,20 @@ export const World = jest.fn(() => ({
     removeRigidBody: jest.fn(),
 }));
 
+export const EventQueue = jest.fn(() => ({
+    drainCollisionEvents: jest.fn(),
+}));
+
+export const ActiveEvents = {
+    COLLISION_EVENTS: 1,
+};
+
 const mockDesc = {
     setTranslation: jest.fn().mockReturnThis(),
     setRotation: jest.fn().mockReturnThis(),
     setRestitution: jest.fn().mockReturnThis(),
     setFriction: jest.fn().mockReturnThis(),
+    setActiveEvents: jest.fn().mockReturnThis(),
 };
 
 export const RigidBodyDesc = {

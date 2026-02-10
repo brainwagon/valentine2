@@ -5,7 +5,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import * as RAPIER from '@dimforge/rapier3d-compat';
 
-let scene, camera, renderer, starfield, world, spawnInterval, raycaster, composer;
+let scene, camera, renderer, starfield, world, eventQueue, spawnInterval, raycaster, composer;
 let listener, ambientMusic, collisionSound;
 const mouse = new THREE.Vector2();
 const hearts = new Map(); // Map Three.js mesh to Rapier rigid body
@@ -21,6 +21,7 @@ export async function init() {
     await RAPIER.init();
     const gravity = { x: 0.0, y: -9.81, z: 0.0 };
     world = new RAPIER.World(gravity);
+    eventQueue = new RAPIER.EventQueue(true);
 
     // Scene
     scene = new THREE.Scene();
@@ -90,17 +91,29 @@ function initAudio() {
     const audioLoader = new THREE.AudioLoader();
     
     ambientMusic = new THREE.Audio(listener);
-    audioLoader.load('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', (buffer) => {
-        ambientMusic.setBuffer(buffer);
-        ambientMusic.setLoop(true);
-        ambientMusic.setVolume(0.3);
-    });
+    // Reliable Three.js example sound
+    audioLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/sounds/376737__re_id__master-of-the-feast.mp3', 
+        (buffer) => {
+            ambientMusic.setBuffer(buffer);
+            ambientMusic.setLoop(true);
+            ambientMusic.setVolume(0.3);
+            console.log('Ambient music loaded');
+        },
+        undefined,
+        (err) => console.error('Error loading ambient music:', err)
+    );
 
     collisionSound = new THREE.Audio(listener);
-    audioLoader.load('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', (buffer) => {
-        collisionSound.setBuffer(buffer);
-        collisionSound.setVolume(0.5);
-    });
+    // Reliable Three.js example sound
+    audioLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/sounds/ping_pong.mp3', 
+        (buffer) => {
+            collisionSound.setBuffer(buffer);
+            collisionSound.setVolume(0.4);
+            console.log('Collision sound loaded');
+        },
+        undefined,
+        (err) => console.error('Error loading collision sound:', err)
+    );
 }
 
 function createStarfield() {
@@ -131,7 +144,8 @@ function createPlatform() {
     const rigidBody = world.createRigidBody(rigidBodyDesc);
     const colliderDesc = RAPIER.ColliderDesc.cuboid(size / 2, thickness / 2, size / 2)
         .setRestitution(0.8)
-        .setFriction(0.5);
+        .setFriction(0.5)
+        .setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS);
     world.createCollider(colliderDesc, rigidBody);
 }
 
@@ -176,7 +190,10 @@ function spawnHeart() {
         .setRotation({ x: quaternion.x, y: quaternion.y, z: quaternion.z, w: quaternion.w });
     const rigidBody = world.createRigidBody(rigidBodyDesc);
 
-    const colliderDesc = RAPIER.ColliderDesc.ball(0.6).setRestitution(0.8).setFriction(0.5);
+    const colliderDesc = RAPIER.ColliderDesc.ball(0.6)
+        .setRestitution(0.8)
+        .setFriction(0.5)
+        .setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS);
     world.createCollider(colliderDesc, rigidBody);
 
     hearts.set(heartMesh, rigidBody);
@@ -185,7 +202,11 @@ function spawnHeart() {
 function onClick(event) {
     if (!raycaster) return;
 
-    if (ambientMusic && !ambientMusic.isPlaying) {
+    if (listener && listener.context.state === 'suspended') {
+        listener.context.resume();
+    }
+
+    if (ambientMusic && ambientMusic.buffer && !ambientMusic.isPlaying) {
         ambientMusic.play();
     }
     
@@ -201,6 +222,7 @@ function onClick(event) {
 }
 
 function onWindowResize() {
+    if (!camera || !renderer) return;
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -245,7 +267,16 @@ function createSparkles(position) {
 
 function animate() {
     if (world) {
-        world.step();
+        world.step(eventQueue);
+        
+        if (eventQueue) {
+            eventQueue.drainCollisionEvents((handle1, handle2, started) => {
+                if (started && collisionSound && collisionSound.buffer) {
+                    if (collisionSound.isPlaying) collisionSound.stop();
+                    collisionSound.play();
+                }
+            });
+        }
     }
 
     // Sync Hearts

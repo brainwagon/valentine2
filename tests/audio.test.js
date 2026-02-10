@@ -15,6 +15,6 @@ describe('Audio Integration', () => {
     expect(THREE.AudioLoader).toHaveBeenCalled();
     
     const loaderInstance = THREE.AudioLoader.mock.results[0].value;
-    expect(loaderInstance.load).toHaveBeenCalledWith(expect.stringContaining('SoundHelix'), expect.any(Function));
+    expect(loaderInstance.load).toHaveBeenCalledWith(expect.stringContaining('raw.githubusercontent'), expect.any(Function), undefined, expect.any(Function));
   });
 });
