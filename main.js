@@ -160,7 +160,12 @@ function createPlatform() {
     const radius = 4;
     // Semi-sphere (bottom hemisphere) to act as a bowl
     const geometry = new THREE.SphereGeometry(radius, 32, 20, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2);
-    const material = new THREE.MeshStandardMaterial({ color: 0xffaaaa, side: THREE.DoubleSide });
+    const material = new THREE.MeshStandardMaterial({ 
+        color: 0xD4AF37, 
+        metalness: 1.0, 
+        roughness: 0.5, 
+        side: THREE.DoubleSide 
+    });
     const platformMesh = new THREE.Mesh(geometry, material);
     platformMesh.position.y = -2;
     scene.add(platformMesh);

@@ -90,6 +90,7 @@ export const Raycaster = jest.fn(() => ({
 export const Vector2 = jest.fn(() => ({ set: jest.fn() }));
 export const AdditiveBlending = 1;
 export const FrontSide = 0;
+export const DoubleSide = 2;
 export const CanvasTexture = jest.fn();
 export const AudioListener = jest.fn(() => ({
     position: { set: jest.fn() },

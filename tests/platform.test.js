@@ -13,6 +13,12 @@ describe('Platform Creation', () => {
 
     // Three.js
     expect(THREE.SphereGeometry).toHaveBeenCalled();
+    expect(THREE.MeshStandardMaterial).toHaveBeenCalledWith(expect.objectContaining({
+        color: 0xD4AF37,
+        metalness: 1.0,
+        roughness: 0.5,
+        side: THREE.DoubleSide
+    }));
     expect(THREE.Mesh).toHaveBeenCalled();
     const sceneInstance = THREE.Scene.mock.results[0].value;
     expect(sceneInstance.add).toHaveBeenCalledWith(expect.any(Object));
