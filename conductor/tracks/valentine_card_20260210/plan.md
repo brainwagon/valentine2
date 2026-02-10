@@ -33,9 +33,9 @@ This plan outlines the steps to build the interactive Valentine's Day card.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Physics Integration & Core Mechanics' (Protocol in workflow.md) 44b29bd
 
 ## Phase 3: Interactivity & Visual Effects
-- [ ] Task: Implement Clicking/Sparkle Effect
-    - [ ] Implement raycasting to detect clicks near hearts.
-    - [ ] Create a particle-based sparkle effect triggered on click.
+- [x] Task: Implement Clicking/Sparkle Effect f2e5332
+    - [x] Implement raycasting to detect clicks near hearts.
+    - [x] Create a particle-based sparkle effect triggered on click.
 - [ ] Task: Add Post-Processing
     - [ ] Implement UnrealBloomPass or similar for a soft glow/bloom effect.
 - [ ] Task: UI & Personalized Message
