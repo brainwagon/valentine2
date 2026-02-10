@@ -1,9 +1,15 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import * as RAPIER from '@dimforge/rapier3d-compat';
 
-let scene, camera, renderer, starfield;
+let scene, camera, renderer, starfield, world;
 
-export function init() {
+export async function init() {
+    // Physics
+    await RAPIER.init();
+    const gravity = { x: 0.0, y: -9.81, z: 0.0 };
+    world = new RAPIER.World(gravity);
+
     // Scene
     scene = new THREE.Scene();
 
@@ -58,6 +64,9 @@ function createStarfield() {
 }
 
 function animate() {
+    if (world) {
+        world.step();
+    }
     if (starfield) {
         starfield.rotation.y += 0.0005;
     }
