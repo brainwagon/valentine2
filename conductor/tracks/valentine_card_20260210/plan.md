@@ -16,7 +16,7 @@ This plan outlines the steps to build the interactive Valentine's Day card.
     - [x] Implement gentle rotation logic for the starfield.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Project Foundation & Environment' (Protocol in workflow.md) 983215e
 
-## Phase 2: Physics Integration & Core Mechanics
+## Phase 2: Physics Integration & Core Mechanics [checkpoint: 44b29bd]
 - [x] Task: Initialize Rapier Physics bab9f53
     - [x] Load and initialize the Rapier WASM module.
     - [x] Set up the Rapier World with gravity.
@@ -30,7 +30,7 @@ This plan outlines the steps to build the interactive Valentine's Day card.
     - [x] Sync Three.js mesh positions/rotations with Rapier bodies in the animation loop.
 - [x] Task: Implement Heart Cleanup 26e9e39
     - [x] Add logic to delete hearts and their physics bodies when they fall below a certain height.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Physics Integration & Core Mechanics' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Physics Integration & Core Mechanics' (Protocol in workflow.md) 44b29bd
 
 ## Phase 3: Interactivity & Visual Effects
 - [ ] Task: Implement Clicking/Sparkle Effect
