@@ -43,5 +43,11 @@ export const ExtrudeGeometry = jest.fn(() => ({
     center: jest.fn(),
     dispose: jest.fn()
 }));
-export const Quaternion = jest.fn();
-export const Vector3 = jest.fn();
+export const Quaternion = jest.fn(() => ({ set: jest.fn(), copy: jest.fn() }));
+export const Vector3 = jest.fn(() => ({ set: jest.fn(), copy: jest.fn(), sub: jest.fn(() => ({ lengthSq: jest.fn(() => 0) })) }));
+export const Raycaster = jest.fn(() => ({
+    setFromCamera: jest.fn(),
+    intersectObjects: jest.fn(() => [])
+}));
+export const Vector2 = jest.fn(() => ({ set: jest.fn() }));
+export const AdditiveBlending = 1;

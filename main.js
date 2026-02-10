@@ -2,12 +2,15 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import * as RAPIER from '@dimforge/rapier3d-compat';
 
-let scene, camera, renderer, starfield, world, spawnInterval;
+let scene, camera, renderer, starfield, world, spawnInterval, raycaster;
+const mouse = new THREE.Vector2();
 const hearts = new Map(); // Map Three.js mesh to Rapier rigid body
+const sparkles = [];
 
 export async function init() {
     // Reset state
     hearts.clear();
+    sparkles.length = 0;
     if (spawnInterval) clearInterval(spawnInterval);
 
     // Physics
@@ -50,6 +53,10 @@ export async function init() {
     // Heart Spawning
     spawnInterval = setInterval(spawnHeart, 1000);
 
+    // Interaction
+    raycaster = new THREE.Raycaster();
+    window.addEventListener('click', onClick);
+
     // Animation Loop
     renderer.setAnimationLoop(animate);
 
@@ -61,15 +68,13 @@ function createStarfield() {
     const vertices = [];
 
     for (let i = 0; i < 10000; i++) {
-        vertices.push(THREE.MathUtils.randFloatSpread(2000)); // x
-        vertices.push(THREE.MathUtils.randFloatSpread(2000)); // y
-        vertices.push(THREE.MathUtils.randFloatSpread(2000)); // z
+        vertices.push(THREE.MathUtils.randFloatSpread(2000));
+        vertices.push(THREE.MathUtils.randFloatSpread(2000));
+        vertices.push(THREE.MathUtils.randFloatSpread(2000));
     }
 
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-
-    const material = new THREE.PointsMaterial({ color: 0x888888 });
-
+    const material = new THREE.PointsMaterial({ color: 0x888888, size: 0.7 });
     starfield = new THREE.Points(geometry, material);
     scene.add(starfield);
 }
@@ -77,18 +82,13 @@ function createStarfield() {
 function createPlatform() {
     const size = 5;
     const thickness = 0.5;
-
-    // Three.js Mesh
     const geometry = new THREE.BoxGeometry(size, thickness, size);
     const material = new THREE.MeshStandardMaterial({ color: 0xffaaaa });
     const platformMesh = new THREE.Mesh(geometry, material);
     scene.add(platformMesh);
 
-    // Rapier Rigid Body
     const rigidBodyDesc = RAPIER.RigidBodyDesc.fixed();
     const rigidBody = world.createRigidBody(rigidBodyDesc);
-
-    // Rapier Collider
     const colliderDesc = RAPIER.ColliderDesc.cuboid(size / 2, thickness / 2, size / 2);
     world.createCollider(colliderDesc, rigidBody);
 }
@@ -108,13 +108,11 @@ function spawnHeart() {
     const y = 10;
     const z = THREE.MathUtils.randFloatSpread(4);
 
-    // Three.js Mesh
     const shape = createHeartShape();
     const extrudeSettings = { depth: 0.4, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 0.1, bevelThickness: 0.1 };
     const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
     geometry.center();
     
-    // Pastel colors
     const colors = [0xffb7b2, 0xffdac1, 0xe2f0cb, 0xb5ead7, 0xc7ceea];
     const color = colors[Math.floor(Math.random() * colors.length)];
     const material = new THREE.MeshStandardMaterial({ color: color });
@@ -123,15 +121,60 @@ function spawnHeart() {
     heartMesh.position.set(x, y, z);
     scene.add(heartMesh);
 
-    // Rapier Rigid Body
     const rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic().setTranslation(x, y, z);
     const rigidBody = world.createRigidBody(rigidBodyDesc);
-
-    // Rapier Collider (approximate with a ball for stable physics)
     const colliderDesc = RAPIER.ColliderDesc.ball(0.5).setRestitution(0.7).setFriction(0.5);
     world.createCollider(colliderDesc, rigidBody);
 
     hearts.set(heartMesh, rigidBody);
+}
+
+function onClick(event) {
+    if (!raycaster) return;
+    
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(Array.from(hearts.keys()));
+
+    if (intersects.length > 0) {
+        createSparkles(intersects[0].point);
+    }
+}
+
+function createSparkles(position) {
+    const particleCount = 20;
+    const geometry = new THREE.BufferGeometry();
+    const vertices = [];
+    const velocities = [];
+
+    for (let i = 0; i < particleCount; i++) {
+        vertices.push(position.x, position.y, position.z);
+        velocities.push(
+            THREE.MathUtils.randFloatSpread(0.2),
+            THREE.MathUtils.randFloatSpread(0.2),
+            THREE.MathUtils.randFloatSpread(0.2)
+        );
+    }
+
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    const material = new THREE.PointsMaterial({
+        color: 0xffffaa,
+        size: 0.1,
+        transparent: true,
+        opacity: 1,
+        blending: THREE.AdditiveBlending
+    });
+
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
+
+    sparkles.push({
+        mesh: points,
+        velocities: velocities,
+        life: 1.0
+    });
 }
 
 function animate() {
@@ -139,22 +182,40 @@ function animate() {
         world.step();
     }
 
-    // Sync Three.js with Rapier and Cleanup
+    // Sync Hearts
     for (const [mesh, body] of hearts.entries()) {
         const translation = body.translation();
-        
         if (translation.y < -10) {
-            // Cleanup
             scene.remove(mesh);
             mesh.geometry.dispose();
             mesh.material.dispose();
             world.removeRigidBody(body);
             hearts.delete(mesh);
         } else {
-            // Sync
             const rotation = body.rotation();
             mesh.position.set(translation.x, translation.y, translation.z);
             mesh.quaternion.set(rotation.x, rotation.y, rotation.z, rotation.w);
+        }
+    }
+
+    // Update Sparkles
+    for (let i = sparkles.length - 1; i >= 0; i--) {
+        const s = sparkles[i];
+        s.life -= 0.02;
+        if (s.life <= 0) {
+            scene.remove(s.mesh);
+            s.mesh.geometry.dispose();
+            s.mesh.material.dispose();
+            sparkles.splice(i, 1);
+        } else {
+            const positions = s.mesh.geometry.attributes.position.array;
+            for (let j = 0; j < s.velocities.length; j += 3) {
+                positions[j] += s.velocities[j];
+                positions[j+1] += s.velocities[j+1];
+                positions[j+2] += s.velocities[j+2];
+            }
+            s.mesh.geometry.attributes.position.needsUpdate = true;
+            s.mesh.material.opacity = s.life;
         }
     }
 
