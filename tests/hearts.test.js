@@ -18,6 +18,7 @@ describe('Heart Spawning & Physics', () => {
     
     jest.advanceTimersByTime(1000);
     expect(THREE.ExtrudeGeometry).toHaveBeenCalled();
+    expect(THREE.PlaneGeometry).toHaveBeenCalled();
     expect(RAPIER.RigidBodyDesc.dynamic).toHaveBeenCalled();
     expect(RAPIER.ColliderDesc.ball).toHaveBeenCalled();
 

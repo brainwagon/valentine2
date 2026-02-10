@@ -11,6 +11,31 @@ const mouse = new THREE.Vector2();
 const hearts = new Map(); // Map Three.js mesh to Rapier rigid body
 const sparkles = [];
 
+export function createLabelTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
+    const context = canvas.getContext('2d');
+    if (!context) return new THREE.CanvasTexture(canvas);
+
+    // Transparent background
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Text: Deep saturated red, solid, no outline
+    const text = 'M❤C';
+    context.font = 'bold 90px Arial';
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    
+    context.fillStyle = '#8b0000'; // Deep red
+    context.fillText(text, canvas.width / 2, canvas.height / 2);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.needsUpdate = true;
+    return texture;
+}
+
 export async function init() {
     // Reset state
     hearts.clear();
@@ -49,7 +74,7 @@ export async function init() {
 
     const bloomPass = new UnrealBloomPass(
         new THREE.Vector2(window.innerWidth, window.innerHeight),
-        1.5,
+        1.2,
         0.4,
         0.85
     );
@@ -60,7 +85,7 @@ export async function init() {
     controls.update();
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
 
     const dirLight = new THREE.DirectionalLight(0xffffff, 1);
@@ -91,12 +116,12 @@ function initAudio() {
     const audioLoader = new THREE.AudioLoader();
     
     ambientMusic = new THREE.Audio(listener);
-    // Reliable Three.js example sound
-    audioLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/sounds/376737__re_id__master-of-the-feast.mp3', 
+    // Use local mp3 file
+    audioLoader.load('./what_a_wonderful_world.mp3', 
         (buffer) => {
             ambientMusic.setBuffer(buffer);
             ambientMusic.setLoop(true);
-            ambientMusic.setVolume(0.3);
+            ambientMusic.setVolume(0.5);
             console.log('Ambient music loaded');
         },
         undefined,
@@ -104,11 +129,10 @@ function initAudio() {
     );
 
     collisionSound = new THREE.Audio(listener);
-    // Reliable Three.js example sound
-    audioLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/sounds/ping_pong.mp3', 
+    audioLoader.load('https://threejs.org/examples/sounds/ping_pong.mp3', 
         (buffer) => {
             collisionSound.setBuffer(buffer);
-            collisionSound.setVolume(0.4);
+            collisionSound.setVolume(0.3);
             console.log('Collision sound loaded');
         },
         undefined,
@@ -151,12 +175,22 @@ function createPlatform() {
 
 export function createHeartShape() {
     const shape = new THREE.Shape();
+    // Oriented to point down
     shape.moveTo(0, 0);
-    shape.bezierCurveTo(0, -0.3, -0.6, -0.3, -0.6, 0);
-    shape.bezierCurveTo(-0.6, 0.3, -0.2, 1, 0, 1);
-    shape.bezierCurveTo(0.2, 1, 0.6, 0.3, 0.6, 0);
-    shape.bezierCurveTo(0.6, -0.3, 0, -0.3, 0, 0);
+    shape.bezierCurveTo(0, 0.3, -0.6, 0.3, -0.6, 0);
+    shape.bezierCurveTo(-0.6, -0.3, -0.2, -1, 0, -1);
+    shape.bezierCurveTo(0.2, -1, 0.6, -0.3, 0.6, 0);
+    shape.bezierCurveTo(0.6, 0.3, 0, 0.3, 0, 0);
     return shape;
+}
+
+export function createHeartGeometry() {
+    const shape = createHeartShape();
+    const extrudeSettings = { depth: 0.4, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 0.1, bevelThickness: 0.1 };
+    const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+    geometry.center();
+    geometry.computeVertexNormals();
+    return geometry;
 }
 
 function spawnHeart() {
@@ -171,18 +205,32 @@ function spawnHeart() {
     );
     const quaternion = new THREE.Quaternion().setFromEuler(randRot);
 
-    const shape = createHeartShape();
-    const extrudeSettings = { depth: 0.4, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 0.1, bevelThickness: 0.1 };
-    const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-    geometry.center();
+    const geometry = createHeartGeometry();
     
     const colors = [0xffb7b2, 0xffdac1, 0xe2f0cb, 0xb5ead7, 0xc7ceea];
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    const material = new THREE.MeshStandardMaterial({ color: color });
+    const colorValue = colors[Math.floor(Math.random() * colors.length)];
+    const material = new THREE.MeshStandardMaterial({ color: colorValue });
     
     const heartMesh = new THREE.Mesh(geometry, material);
     heartMesh.position.set(x, y, z);
     heartMesh.quaternion.copy(quaternion);
+    
+    // Label on the front side
+    const labelTexture = createLabelTexture();
+    const labelGeo = new THREE.PlaneGeometry(1.0, 1.0);
+    const labelMat = new THREE.MeshBasicMaterial({ 
+        map: labelTexture, 
+        transparent: true,
+        side: THREE.FrontSide
+    });
+
+    const labelFront = new THREE.Mesh(labelGeo, labelMat);
+    // Extrude depth is 0.4. geometry.center() puts faces at +/- 0.2.
+    // bevelThickness is 0.1. So front-most face is at z = 0.2 + 0.1 = 0.3.
+    // Set position.z to 0.31 to be just outside.
+    labelFront.position.z = 0.31;
+    heartMesh.add(labelFront);
+
     scene.add(heartMesh);
 
     const rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic()
@@ -190,7 +238,7 @@ function spawnHeart() {
         .setRotation({ x: quaternion.x, y: quaternion.y, z: quaternion.z, w: quaternion.w });
     const rigidBody = world.createRigidBody(rigidBodyDesc);
 
-    const colliderDesc = RAPIER.ColliderDesc.ball(0.6)
+    const colliderDesc = RAPIER.ColliderDesc.ball(0.7)
         .setRestitution(0.8)
         .setFriction(0.5)
         .setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS);
@@ -265,10 +313,27 @@ function createSparkles(position) {
     });
 }
 
+function disposeObject(obj) {
+    if (obj.geometry) obj.geometry.dispose();
+    if (obj.material) {
+        if (Array.isArray(obj.material)) {
+            obj.material.forEach(m => {
+                if (m.map) m.map.dispose();
+                m.dispose();
+            });
+        } else {
+            if (obj.material.map) obj.material.map.dispose();
+            obj.material.dispose();
+        }
+    }
+    if (obj.children) {
+        obj.children.forEach(child => disposeObject(child));
+    }
+}
+
 function animate() {
     if (world) {
         world.step(eventQueue);
-        
         if (eventQueue) {
             eventQueue.drainCollisionEvents((handle1, handle2, started) => {
                 if (started && collisionSound && collisionSound.buffer) {
@@ -284,8 +349,7 @@ function animate() {
         const translation = body.translation();
         if (translation.y < -10) {
             scene.remove(mesh);
-            mesh.geometry.dispose();
-            mesh.material.dispose();
+            disposeObject(mesh);
             world.removeRigidBody(body);
             hearts.delete(mesh);
         } else {
@@ -301,8 +365,7 @@ function animate() {
         s.life -= 0.02;
         if (s.life <= 0) {
             scene.remove(s.mesh);
-            s.mesh.geometry.dispose();
-            s.mesh.material.dispose();
+            disposeObject(s.mesh);
             sparkles.splice(i, 1);
         } else {
             const positions = s.mesh.geometry.attributes.position.array;

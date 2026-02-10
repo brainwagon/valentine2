@@ -14,7 +14,11 @@ export const WebGLRenderer = jest.fn(() => ({
 }));
 export const AmbientLight = jest.fn();
 export const DirectionalLight = jest.fn(() => ({ position: { set: jest.fn() } }));
-export const Points = jest.fn(() => ({ rotation: { y: 0 } }));
+export const Points = jest.fn(() => ({ 
+    rotation: { y: 0 },
+    geometry: { attributes: { position: { array: new Float32Array(100) } } },
+    material: { opacity: 1 }
+}));
 export const BufferGeometry = jest.fn(() => ({ 
     setAttribute: jest.fn(),
     center: jest.fn(),
@@ -31,14 +35,21 @@ export const BoxGeometry = jest.fn(() => ({
     center: jest.fn(),
     dispose: jest.fn()
 }));
+export const PlaneGeometry = jest.fn();
 export const MeshStandardMaterial = jest.fn(() => ({
+    dispose: jest.fn()
+}));
+export const MeshBasicMaterial = jest.fn(() => ({
     dispose: jest.fn()
 }));
 export const Mesh = jest.fn(() => ({ 
     position: { set: jest.fn(), copy: jest.fn() },
     quaternion: { set: jest.fn(), copy: jest.fn() },
+    rotation: { set: jest.fn(), y: 0 },
     geometry: { dispose: jest.fn() },
-    material: { dispose: jest.fn() }
+    material: { dispose: jest.fn() },
+    add: jest.fn(),
+    children: []
 }));
 export const Shape = jest.fn(() => ({
     moveTo: jest.fn(),
@@ -46,7 +57,9 @@ export const Shape = jest.fn(() => ({
 }));
 export const ExtrudeGeometry = jest.fn(() => ({
     center: jest.fn(),
-    dispose: jest.fn()
+    dispose: jest.fn(),
+    computeVertexNormals: jest.fn(),
+    groups: []
 }));
 export const Quaternion = jest.fn(() => ({ 
     set: jest.fn(), 
@@ -61,6 +74,8 @@ export const Raycaster = jest.fn(() => ({
 }));
 export const Vector2 = jest.fn(() => ({ set: jest.fn() }));
 export const AdditiveBlending = 1;
+export const FrontSide = 0;
+export const CanvasTexture = jest.fn();
 export const AudioListener = jest.fn(() => ({
     position: { set: jest.fn() },
     rotation: { set: jest.fn() },
@@ -80,4 +95,3 @@ export const Audio = jest.fn(() => ({
 export const AudioLoader = jest.fn(() => ({
     load: jest.fn()
 }));
-
