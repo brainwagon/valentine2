@@ -2,10 +2,14 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import * as RAPIER from '@dimforge/rapier3d-compat';
 
-let scene, camera, renderer, starfield, world;
+let scene, camera, renderer, starfield, world, spawnInterval;
 const hearts = new Map(); // Map Three.js mesh to Rapier rigid body
 
 export async function init() {
+    // Reset state
+    hearts.clear();
+    if (spawnInterval) clearInterval(spawnInterval);
+
     // Physics
     await RAPIER.init();
     const gravity = { x: 0.0, y: -9.81, z: 0.0 };
@@ -44,7 +48,7 @@ export async function init() {
     createPlatform();
 
     // Heart Spawning
-    setInterval(spawnHeart, 1000);
+    spawnInterval = setInterval(spawnHeart, 1000);
 
     // Animation Loop
     renderer.setAnimationLoop(animate);
@@ -135,16 +139,27 @@ function animate() {
         world.step();
     }
 
-    // Sync Three.js with Rapier
-    hearts.forEach((body, mesh) => {
+    // Sync Three.js with Rapier and Cleanup
+    for (const [mesh, body] of hearts.entries()) {
         const translation = body.translation();
-        const rotation = body.rotation();
-        mesh.position.set(translation.x, translation.y, translation.z);
-        mesh.quaternion.set(rotation.x, rotation.y, rotation.z, rotation.w);
-    });
+        
+        if (translation.y < -10) {
+            // Cleanup
+            scene.remove(mesh);
+            mesh.geometry.dispose();
+            mesh.material.dispose();
+            world.removeRigidBody(body);
+            hearts.delete(mesh);
+        } else {
+            // Sync
+            const rotation = body.rotation();
+            mesh.position.set(translation.x, translation.y, translation.z);
+            mesh.quaternion.set(rotation.x, rotation.y, rotation.z, rotation.w);
+        }
+    }
 
     if (starfield) {
         starfield.rotation.y += 0.0005;
     }
-    renderer.render(scene, camera);
+    if (renderer) renderer.render(scene, camera);
 }
