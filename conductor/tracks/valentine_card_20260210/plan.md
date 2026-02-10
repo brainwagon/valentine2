@@ -28,8 +28,8 @@ This plan outlines the steps to build the interactive Valentine's Day card.
     - [x] Implement a spawning loop (once per second).
     - [x] Create dynamic Rapier rigid bodies and colliders for each heart.
     - [x] Sync Three.js mesh positions/rotations with Rapier bodies in the animation loop.
-- [ ] Task: Implement Heart Cleanup
-    - [ ] Add logic to delete hearts and their physics bodies when they fall below a certain height.
+- [x] Task: Implement Heart Cleanup 26e9e39
+    - [x] Add logic to delete hearts and their physics bodies when they fall below a certain height.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Physics Integration & Core Mechanics' (Protocol in workflow.md)
 
 ## Phase 3: Interactivity & Visual Effects
