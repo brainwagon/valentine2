@@ -17,9 +17,9 @@ This plan outlines the steps to build the interactive Valentine's Day card.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Project Foundation & Environment' (Protocol in workflow.md) 983215e
 
 ## Phase 2: Physics Integration & Core Mechanics
-- [ ] Task: Initialize Rapier Physics
-    - [ ] Load and initialize the Rapier WASM module.
-    - [ ] Set up the Rapier World with gravity.
+- [x] Task: Initialize Rapier Physics bab9f53
+    - [x] Load and initialize the Rapier WASM module.
+    - [x] Set up the Rapier World with gravity.
 - [ ] Task: Create the Platform
     - [ ] Create a Three.js mesh for the 5x5 platform.
     - [ ] Create a corresponding static Rapier rigid body and collider.
