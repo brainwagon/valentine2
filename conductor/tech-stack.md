@@ -9,6 +9,7 @@
 ## 2. Infrastructure & Tools
 *   **Development Server:** Simple local server (e.g., `python3 -m http.server` or `live-server`).
 *   **Build Process:** No build step (Direct use of ESM in the browser).
+*   **Testing:** Jest with JSDom and Babel for unit testing and scene verification.
 *   **Version Control:** Git
 
 ## 3. Libraries & Dependencies

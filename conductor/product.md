@@ -22,10 +22,10 @@ I'd like to build a simple single page application that doesn't use any framewor
     *   Hearts are colored in various soft pastel shades.
     *   A romantic background environment (e.g., starry sky or soft gradients) to set the mood.
     *   A personalized Valentine's message displayed on screen.
-*   **Interactivity:**
+    *   **Interactivity:**
     *   **Camera Control:** Users can orbit (rotate) and zoom the camera to view the scene from different angles (using Three.js OrbitControls).
-    *   **Direct Interaction:** Users can click or interact with the hearts (e.g., potentially spawning more or affecting their movement).
-
+    *   **Direct Interaction:** Users can click on the hearts to generate a magical sparkle particle effect.
+    *   **Audio:** Ambient romantic music plays upon the first user interaction, and soft collision sound effects trigger when hearts hit surfaces.
 ## 4. Technical Constraints
 *   **Framework:** No frontend frameworks (React, Vue, etc.). Vanilla JavaScript only.
 *   **Libraries:** Three.js and Rapier loaded via CDN.
