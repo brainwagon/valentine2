@@ -7,10 +7,10 @@ This plan outlines the steps to build the interactive Valentine's Day card.
     - [x] Create `index.html` with basic layout and CDN links for Three.js and Rapier.
     - [x] Create `style.css` for typography and basic UI styling.
     - [x] Create `main.js` as the entry point.
-- [ ] Task: Initialize Three.js Scene
-    - [ ] Set up Scene, Camera (Perspective), and Renderer.
-    - [ ] Add OrbitControls for camera interaction.
-    - [ ] Add basic lighting (Ambient and Directional).
+- [x] Task: Initialize Three.js Scene ae598c5
+    - [x] Set up Scene, Camera (Perspective), and Renderer.
+    - [x] Add OrbitControls for camera interaction.
+    - [x] Add basic lighting (Ambient and Directional).
 - [ ] Task: Implement Starfield Background
     - [ ] Create a particle system for stars.
     - [ ] Implement gentle rotation logic for the starfield.
