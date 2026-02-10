@@ -18,10 +18,10 @@ This plan outlines the steps to implement smooth-shaded hearts, a bowl-shaped pl
     - [x] Verify that hearts collide correctly with the interior of the bowl.
 - [x] Task: Conductor - User Manual Verification 'Bowl Platform Implementation' (Protocol in workflow.md) 131cbc2
 
-## Phase 3: Spawning Logic Update
-- [ ] Task: Update Spawning Frequency and Variance
-    - [ ] Modify the spawning timer to use a random interval between 0.3s and 0.7s.
-    - [ ] Ensure the average rate remains approximately 0.5s (2 hearts/sec).
-- [ ] Task: Adjust Heart Deletion Logic
-    - [ ] Ensure hearts are deleted if they fall significantly below the bowl's vertical position.
-- [ ] Task: Conductor - User Manual Verification 'Spawning Logic Update' (Protocol in workflow.md)
+## Phase 3: Spawning Logic Update [checkpoint: 6f0974f]
+- [x] Task: Update Spawning Frequency and Variance 3595619
+    - [x] Modify the spawning timer to use a random interval between 0.3s and 0.7s.
+    - [x] Ensure the average rate remains approximately 0.5s (2 hearts/sec).
+- [x] Task: Adjust Heart Deletion Logic 3595619
+    - [x] Ensure hearts are deleted if they fall significantly below the bowl's vertical position.
+- [x] Task: Conductor - User Manual Verification 'Spawning Logic Update' (Protocol in workflow.md) 6f0974f
