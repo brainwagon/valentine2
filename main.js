@@ -1,8 +1,11 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import * as RAPIER from '@dimforge/rapier3d-compat';
 
-let scene, camera, renderer, starfield, world, spawnInterval, raycaster;
+let scene, camera, renderer, starfield, world, spawnInterval, raycaster, composer;
 const mouse = new THREE.Vector2();
 const hearts = new Map(); // Map Three.js mesh to Rapier rigid body
 const sparkles = [];
@@ -31,6 +34,19 @@ export async function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(renderer.domElement);
+
+    // Post-processing
+    composer = new EffectComposer(renderer);
+    const renderPass = new RenderPass(scene, camera);
+    composer.addPass(renderPass);
+
+    const bloomPass = new UnrealBloomPass(
+        new THREE.Vector2(window.innerWidth, window.innerHeight),
+        1.5, // strength
+        0.4, // radius
+        0.85 // threshold
+    );
+    composer.addPass(bloomPass);
 
     // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -222,5 +238,10 @@ function animate() {
     if (starfield) {
         starfield.rotation.y += 0.0005;
     }
-    if (renderer) renderer.render(scene, camera);
+    
+    if (composer) {
+        composer.render();
+    } else if (renderer) {
+        renderer.render(scene, camera);
+    }
 }
