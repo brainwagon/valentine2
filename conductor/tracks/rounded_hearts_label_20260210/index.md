@@ -1,4 +1,4 @@
-# Track valentine_card_20260210 Context
+# Track rounded_hearts_label_20260210 Context
 
 - [Specification](./spec.md)
 - [Implementation Plan](./plan.md)

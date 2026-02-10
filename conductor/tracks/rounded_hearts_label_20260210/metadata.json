@@ -1,0 +1,8 @@
+{
+  "track_id": "rounded_hearts_label_20260210",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-02-10T12:00:00Z",
+  "updated_at": "2026-02-10T12:00:00Z",
+  "description": "feature: the bottom end of the heart should appear more rounded, and one side of the heart should be labeled with "M❤C", where ❤ is the heart icon."
+}

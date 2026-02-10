@@ -149,12 +149,12 @@ function createPlatform() {
     world.createCollider(colliderDesc, rigidBody);
 }
 
-function createHeartShape() {
+export function createHeartShape() {
     const shape = new THREE.Shape();
     shape.moveTo(0, 0);
     shape.bezierCurveTo(0, -0.3, -0.6, -0.3, -0.6, 0);
-    shape.bezierCurveTo(-0.6, 0.3, 0, 0.6, 0, 1);
-    shape.bezierCurveTo(0, 0.6, 0.6, 0.3, 0.6, 0);
+    shape.bezierCurveTo(-0.6, 0.3, -0.2, 1, 0, 1);
+    shape.bezierCurveTo(0.2, 1, 0.6, 0.3, 0.6, 0);
     shape.bezierCurveTo(0.6, -0.3, 0, -0.3, 0, 0);
     return shape;
 }
