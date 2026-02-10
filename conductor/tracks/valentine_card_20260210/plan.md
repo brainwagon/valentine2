@@ -20,9 +20,9 @@ This plan outlines the steps to build the interactive Valentine's Day card.
 - [x] Task: Initialize Rapier Physics bab9f53
     - [x] Load and initialize the Rapier WASM module.
     - [x] Set up the Rapier World with gravity.
-- [ ] Task: Create the Platform
-    - [ ] Create a Three.js mesh for the 5x5 platform.
-    - [ ] Create a corresponding static Rapier rigid body and collider.
+- [x] Task: Create the Platform 269008f
+    - [x] Create a Three.js mesh for the 5x5 platform.
+    - [x] Create a corresponding static Rapier rigid body and collider.
 - [ ] Task: Implement Heart Spawning & Physics
     - [ ] Create a function to generate a 3D heart geometry.
     - [ ] Implement a spawning loop (once per second).
