@@ -36,8 +36,8 @@ This plan outlines the steps to build the interactive Valentine's Day card.
 - [x] Task: Implement Clicking/Sparkle Effect f2e5332
     - [x] Implement raycasting to detect clicks near hearts.
     - [x] Create a particle-based sparkle effect triggered on click.
-- [ ] Task: Add Post-Processing
-    - [ ] Implement UnrealBloomPass or similar for a soft glow/bloom effect.
+- [x] Task: Add Post-Processing 6c54a15
+    - [x] Implement UnrealBloomPass or similar for a soft glow/bloom effect.
 - [ ] Task: UI & Personalized Message
     - [ ] Add "Happy Valentine's Day Carmen!" message using HTML/CSS.
     - [ ] Apply whimsical styling and positioning.
