@@ -14,6 +14,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 
 
-- [~] **Track: feature: Some basic changes. 1. Make the hearts have smooth normals instead of faceted normals. 2. Instead of a flat platform, change it to a cup, and position it so that it is below the center of screen. 3. Double the that hearts appear.**
+- [x] **Track: feature: Some basic changes. 1. Make the hearts have smooth normals instead of faceted normals. 2. Instead of a flat platform, change it to a cup, and position it so that it is below the center of screen. 3. Double the that hearts appear.**
 
 *Link: [./tracks/enhanced_hearts_bowl_20260210/](./tracks/enhanced_hearts_bowl_20260210/)*
