@@ -1,4 +1,4 @@
-export const Scene = jest.fn(() => ({ add: jest.fn() }));
+export const Scene = jest.fn(() => ({ add: jest.fn(), remove: jest.fn() }));
 export const PerspectiveCamera = jest.fn(() => ({ position: { set: jest.fn() }, lookAt: jest.fn() }));
 export const WebGLRenderer = jest.fn(() => ({ 
     setSize: jest.fn(), 
@@ -10,11 +10,38 @@ export const WebGLRenderer = jest.fn(() => ({
 export const AmbientLight = jest.fn();
 export const DirectionalLight = jest.fn(() => ({ position: { set: jest.fn() } }));
 export const Points = jest.fn(() => ({ rotation: { y: 0 } }));
-export const BufferGeometry = jest.fn(() => ({ setAttribute: jest.fn() }));
+export const BufferGeometry = jest.fn(() => ({ 
+    setAttribute: jest.fn(),
+    center: jest.fn(),
+    dispose: jest.fn()
+}));
 export const Float32BufferAttribute = jest.fn();
 export const PointsMaterial = jest.fn();
 export const Color = jest.fn();
-export const MathUtils = { randFloatSpread: jest.fn(() => 0.5) };
-export const BoxGeometry = jest.fn();
-export const MeshStandardMaterial = jest.fn();
-export const Mesh = jest.fn(() => ({ position: { set: jest.fn() } }));
+export const MathUtils = { 
+    randFloatSpread: jest.fn((range) => (Math.random() - 0.5) * range),
+    randFloat: jest.fn((low, high) => Math.random() * (high - low) + low)
+};
+export const BoxGeometry = jest.fn(() => ({
+    center: jest.fn(),
+    dispose: jest.fn()
+}));
+export const MeshStandardMaterial = jest.fn(() => ({
+    dispose: jest.fn()
+}));
+export const Mesh = jest.fn(() => ({ 
+    position: { set: jest.fn(), copy: jest.fn() },
+    quaternion: { set: jest.fn(), copy: jest.fn() },
+    geometry: { dispose: jest.fn() },
+    material: { dispose: jest.fn() }
+}));
+export const Shape = jest.fn(() => ({
+    moveTo: jest.fn(),
+    bezierCurveTo: jest.fn(),
+}));
+export const ExtrudeGeometry = jest.fn(() => ({
+    center: jest.fn(),
+    dispose: jest.fn()
+}));
+export const Quaternion = jest.fn();
+export const Vector3 = jest.fn();

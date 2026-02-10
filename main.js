@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import * as RAPIER from '@dimforge/rapier3d-compat';
 
 let scene, camera, renderer, starfield, world;
+const hearts = new Map(); // Map Three.js mesh to Rapier rigid body
 
 export async function init() {
     // Physics
@@ -42,6 +43,9 @@ export async function init() {
     // Platform
     createPlatform();
 
+    // Heart Spawning
+    setInterval(spawnHeart, 1000);
+
     // Animation Loop
     renderer.setAnimationLoop(animate);
 
@@ -72,7 +76,7 @@ function createPlatform() {
 
     // Three.js Mesh
     const geometry = new THREE.BoxGeometry(size, thickness, size);
-    const material = new THREE.MeshStandardMaterial({ color: 0xffaaaa }); // Soft pink
+    const material = new THREE.MeshStandardMaterial({ color: 0xffaaaa });
     const platformMesh = new THREE.Mesh(geometry, material);
     scene.add(platformMesh);
 
@@ -85,10 +89,60 @@ function createPlatform() {
     world.createCollider(colliderDesc, rigidBody);
 }
 
+function createHeartShape() {
+    const shape = new THREE.Shape();
+    shape.moveTo(0, 0);
+    shape.bezierCurveTo(0, -0.3, -0.6, -0.3, -0.6, 0);
+    shape.bezierCurveTo(-0.6, 0.3, 0, 0.6, 0, 1);
+    shape.bezierCurveTo(0, 0.6, 0.6, 0.3, 0.6, 0);
+    shape.bezierCurveTo(0.6, -0.3, 0, -0.3, 0, 0);
+    return shape;
+}
+
+function spawnHeart() {
+    const x = THREE.MathUtils.randFloatSpread(4);
+    const y = 10;
+    const z = THREE.MathUtils.randFloatSpread(4);
+
+    // Three.js Mesh
+    const shape = createHeartShape();
+    const extrudeSettings = { depth: 0.4, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 0.1, bevelThickness: 0.1 };
+    const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+    geometry.center();
+    
+    // Pastel colors
+    const colors = [0xffb7b2, 0xffdac1, 0xe2f0cb, 0xb5ead7, 0xc7ceea];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const material = new THREE.MeshStandardMaterial({ color: color });
+    
+    const heartMesh = new THREE.Mesh(geometry, material);
+    heartMesh.position.set(x, y, z);
+    scene.add(heartMesh);
+
+    // Rapier Rigid Body
+    const rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic().setTranslation(x, y, z);
+    const rigidBody = world.createRigidBody(rigidBodyDesc);
+
+    // Rapier Collider (approximate with a ball for stable physics)
+    const colliderDesc = RAPIER.ColliderDesc.ball(0.5).setRestitution(0.7).setFriction(0.5);
+    world.createCollider(colliderDesc, rigidBody);
+
+    hearts.set(heartMesh, rigidBody);
+}
+
 function animate() {
     if (world) {
         world.step();
     }
+
+    // Sync Three.js with Rapier
+    hearts.forEach((body, mesh) => {
+        const translation = body.translation();
+        const rotation = body.rotation();
+        mesh.position.set(translation.x, translation.y, translation.z);
+        mesh.quaternion.set(rotation.x, rotation.y, rotation.z, rotation.w);
+    });
+
     if (starfield) {
         starfield.rotation.y += 0.0005;
     }
