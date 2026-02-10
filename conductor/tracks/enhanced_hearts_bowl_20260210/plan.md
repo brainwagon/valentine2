@@ -3,9 +3,9 @@
 This plan outlines the steps to implement smooth-shaded hearts, a bowl-shaped platform with trimesh collisions, and an increased, variable spawning rate.
 
 ## Phase 1: Heart Visual Improvement
-- [ ] Task: Update Heart Geometry to Smooth Normals
-    - [ ] Modify heart creation logic to compute or use smooth vertex normals.
-    - [ ] Verify visual appearance in scene (smooth vs. faceted).
+- [x] Task: Update Heart Geometry to Smooth Normals 90bca24
+    - [x] Modify heart creation logic to compute or use smooth vertex normals.
+    - [x] Verify visual appearance in scene (smooth vs. faceted).
 - [ ] Task: Conductor - User Manual Verification 'Heart Visual Improvement' (Protocol in workflow.md)
 
 ## Phase 2: Bowl Platform Implementation
