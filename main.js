@@ -40,7 +40,7 @@ export async function init() {
     // Reset state
     hearts.clear();
     sparkles.length = 0;
-    if (spawnInterval) clearInterval(spawnInterval);
+    if (spawnInterval) clearTimeout(spawnInterval);
 
     // Physics
     await RAPIER.init();
@@ -99,7 +99,7 @@ export async function init() {
     createPlatform();
 
     // Heart Spawning
-    spawnInterval = setInterval(spawnHeart, 1000);
+    scheduleNextSpawn();
 
     // Interaction
     raycaster = new THREE.Raycaster();
@@ -196,6 +196,14 @@ export function createHeartGeometry() {
     geometry.center();
     geometry.computeVertexNormals();
     return geometry;
+}
+
+function scheduleNextSpawn() {
+    const delay = THREE.MathUtils.randFloat(300, 700);
+    spawnInterval = setTimeout(() => {
+        spawnHeart();
+        scheduleNextSpawn();
+    }, delay);
 }
 
 function spawnHeart() {
@@ -352,7 +360,7 @@ function animate() {
     // Sync Hearts
     for (const [mesh, body] of hearts.entries()) {
         const translation = body.translation();
-        if (translation.y < -10) {
+        if (translation.y < -12) {
             scene.remove(mesh);
             disposeObject(mesh);
             world.removeRigidBody(body);
