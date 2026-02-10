@@ -2,11 +2,11 @@
 
 This plan outlines the steps to implement rounded heart geometry and the "M❤C" label.
 
-## Phase 1: Rounded Geometry Implementation
+## Phase 1: Rounded Geometry Implementation [checkpoint: d3d5d14]
 - [x] Task: Update `createHeartShape` for rounded bottom
     - [x] Write a test to verify the heart shape is being generated (using a mock for THREE.Shape).
     - [x] Modify `bezierCurveTo` parameters in `main.js` to soften the bottom vertex.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Rounded Geometry Implementation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Rounded Geometry Implementation' (Protocol in workflow.md) d3d5d14
 
 ## Phase 2: Texture & Material Implementation
 - [ ] Task: Create Label Texture Generator
