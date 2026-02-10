@@ -78,6 +78,7 @@ export async function init() {
     // Interaction
     raycaster = new THREE.Raycaster();
     window.addEventListener('click', onClick);
+    window.addEventListener('resize', onWindowResize);
 
     // Animation Loop
     renderer.setAnimationLoop(animate);
@@ -88,19 +89,14 @@ export async function init() {
 function initAudio() {
     const audioLoader = new THREE.AudioLoader();
     
-    // Ambient Music
     ambientMusic = new THREE.Audio(listener);
-    // Placeholder URL for ambient music
     audioLoader.load('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', (buffer) => {
         ambientMusic.setBuffer(buffer);
         ambientMusic.setLoop(true);
         ambientMusic.setVolume(0.3);
-        // Browser requires user interaction to play audio, handled in onClick
     });
 
-    // Collision SFX
     collisionSound = new THREE.Audio(listener);
-    // Placeholder URL for collision sound
     audioLoader.load('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', (buffer) => {
         collisionSound.setBuffer(buffer);
         collisionSound.setVolume(0.5);
@@ -133,7 +129,9 @@ function createPlatform() {
 
     const rigidBodyDesc = RAPIER.RigidBodyDesc.fixed();
     const rigidBody = world.createRigidBody(rigidBodyDesc);
-    const colliderDesc = RAPIER.ColliderDesc.cuboid(size / 2, thickness / 2, size / 2);
+    const colliderDesc = RAPIER.ColliderDesc.cuboid(size / 2, thickness / 2, size / 2)
+        .setRestitution(0.8)
+        .setFriction(0.5);
     world.createCollider(colliderDesc, rigidBody);
 }
 
@@ -178,7 +176,7 @@ function spawnHeart() {
         .setRotation({ x: quaternion.x, y: quaternion.y, z: quaternion.z, w: quaternion.w });
     const rigidBody = world.createRigidBody(rigidBodyDesc);
 
-    const colliderDesc = RAPIER.ColliderDesc.ball(0.6).setRestitution(0.7).setFriction(0.5);
+    const colliderDesc = RAPIER.ColliderDesc.ball(0.6).setRestitution(0.8).setFriction(0.5);
     world.createCollider(colliderDesc, rigidBody);
 
     hearts.set(heartMesh, rigidBody);
@@ -187,7 +185,6 @@ function spawnHeart() {
 function onClick(event) {
     if (!raycaster) return;
 
-    // Start music on first click (browser policy)
     if (ambientMusic && !ambientMusic.isPlaying) {
         ambientMusic.play();
     }
@@ -200,6 +197,15 @@ function onClick(event) {
 
     if (intersects.length > 0) {
         createSparkles(intersects[0].point);
+    }
+}
+
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    if (composer) {
+        composer.setSize(window.innerWidth, window.innerHeight);
     }
 }
 
@@ -240,9 +246,6 @@ function createSparkles(position) {
 function animate() {
     if (world) {
         world.step();
-        
-        // Optional: Collision sound logic would go here if Rapier events are used
-        // For simplicity in this card, we'll focus on the ambient music.
     }
 
     // Sync Hearts

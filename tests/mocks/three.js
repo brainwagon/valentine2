@@ -2,7 +2,8 @@ export const Scene = jest.fn(() => ({ add: jest.fn(), remove: jest.fn() }));
 export const PerspectiveCamera = jest.fn(() => ({ 
     position: { set: jest.fn() }, 
     lookAt: jest.fn(),
-    add: jest.fn() 
+    add: jest.fn(),
+    updateProjectionMatrix: jest.fn()
 }));
 export const WebGLRenderer = jest.fn(() => ({ 
     setSize: jest.fn(), 
