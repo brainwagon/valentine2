@@ -42,9 +42,9 @@ export async function init() {
 
     const bloomPass = new UnrealBloomPass(
         new THREE.Vector2(window.innerWidth, window.innerHeight),
-        1.5, // strength
-        0.4, // radius
-        0.85 // threshold
+        1.5,
+        0.4,
+        0.85
     );
     composer.addPass(bloomPass);
 
@@ -124,6 +124,14 @@ function spawnHeart() {
     const y = 10;
     const z = THREE.MathUtils.randFloatSpread(4);
 
+    // Random initial orientation
+    const randRot = new THREE.Euler(
+        Math.random() * Math.PI * 2,
+        Math.random() * Math.PI * 2,
+        Math.random() * Math.PI * 2
+    );
+    const quaternion = new THREE.Quaternion().setFromEuler(randRot);
+
     const shape = createHeartShape();
     const extrudeSettings = { depth: 0.4, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 0.1, bevelThickness: 0.1 };
     const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
@@ -135,11 +143,16 @@ function spawnHeart() {
     
     const heartMesh = new THREE.Mesh(geometry, material);
     heartMesh.position.set(x, y, z);
+    heartMesh.quaternion.copy(quaternion);
     scene.add(heartMesh);
 
-    const rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic().setTranslation(x, y, z);
+    const rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic()
+        .setTranslation(x, y, z)
+        .setRotation({ x: quaternion.x, y: quaternion.y, z: quaternion.z, w: quaternion.w });
     const rigidBody = world.createRigidBody(rigidBodyDesc);
-    const colliderDesc = RAPIER.ColliderDesc.ball(0.5).setRestitution(0.7).setFriction(0.5);
+
+    // Increased ball radius to 0.6 to better encompass the heart's vertices and prevent penetration
+    const colliderDesc = RAPIER.ColliderDesc.ball(0.6).setRestitution(0.7).setFriction(0.5);
     world.createCollider(colliderDesc, rigidBody);
 
     hearts.set(heartMesh, rigidBody);
