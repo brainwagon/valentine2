@@ -23,11 +23,11 @@ This plan outlines the steps to build the interactive Valentine's Day card.
 - [x] Task: Create the Platform 269008f
     - [x] Create a Three.js mesh for the 5x5 platform.
     - [x] Create a corresponding static Rapier rigid body and collider.
-- [ ] Task: Implement Heart Spawning & Physics
-    - [ ] Create a function to generate a 3D heart geometry.
-    - [ ] Implement a spawning loop (once per second).
-    - [ ] Create dynamic Rapier rigid bodies and colliders for each heart.
-    - [ ] Sync Three.js mesh positions/rotations with Rapier bodies in the animation loop.
+- [x] Task: Implement Heart Spawning & Physics 97cd3be
+    - [x] Create a function to generate a 3D heart geometry.
+    - [x] Implement a spawning loop (once per second).
+    - [x] Create dynamic Rapier rigid bodies and colliders for each heart.
+    - [x] Sync Three.js mesh positions/rotations with Rapier bodies in the animation loop.
 - [ ] Task: Implement Heart Cleanup
     - [ ] Add logic to delete hearts and their physics bodies when they fall below a certain height.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Physics Integration & Core Mechanics' (Protocol in workflow.md)
