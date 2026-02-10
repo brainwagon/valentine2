@@ -39,6 +39,9 @@ export async function init() {
     // Starfield
     createStarfield();
 
+    // Platform
+    createPlatform();
+
     // Animation Loop
     renderer.setAnimationLoop(animate);
 
@@ -61,6 +64,25 @@ function createStarfield() {
 
     starfield = new THREE.Points(geometry, material);
     scene.add(starfield);
+}
+
+function createPlatform() {
+    const size = 5;
+    const thickness = 0.5;
+
+    // Three.js Mesh
+    const geometry = new THREE.BoxGeometry(size, thickness, size);
+    const material = new THREE.MeshStandardMaterial({ color: 0xffaaaa }); // Soft pink
+    const platformMesh = new THREE.Mesh(geometry, material);
+    scene.add(platformMesh);
+
+    // Rapier Rigid Body
+    const rigidBodyDesc = RAPIER.RigidBodyDesc.fixed();
+    const rigidBody = world.createRigidBody(rigidBodyDesc);
+
+    // Rapier Collider
+    const colliderDesc = RAPIER.ColliderDesc.cuboid(size / 2, thickness / 2, size / 2);
+    world.createCollider(colliderDesc, rigidBody);
 }
 
 function animate() {
