@@ -11,9 +11,9 @@ This plan outlines the steps to build the interactive Valentine's Day card.
     - [x] Set up Scene, Camera (Perspective), and Renderer.
     - [x] Add OrbitControls for camera interaction.
     - [x] Add basic lighting (Ambient and Directional).
-- [ ] Task: Implement Starfield Background
-    - [ ] Create a particle system for stars.
-    - [ ] Implement gentle rotation logic for the starfield.
+- [x] Task: Implement Starfield Background cd3bf6b
+    - [x] Create a particle system for stars.
+    - [x] Implement gentle rotation logic for the starfield.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Project Foundation & Environment' (Protocol in workflow.md)
 
 ## Phase 2: Physics Integration & Core Mechanics
