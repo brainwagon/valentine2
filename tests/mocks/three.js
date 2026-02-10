@@ -1,5 +1,9 @@
 export const Scene = jest.fn(() => ({ add: jest.fn(), remove: jest.fn() }));
-export const PerspectiveCamera = jest.fn(() => ({ position: { set: jest.fn() }, lookAt: jest.fn() }));
+export const PerspectiveCamera = jest.fn(() => ({ 
+    position: { set: jest.fn() }, 
+    lookAt: jest.fn(),
+    add: jest.fn() 
+}));
 export const WebGLRenderer = jest.fn(() => ({ 
     setSize: jest.fn(), 
     render: jest.fn(), 
@@ -43,11 +47,32 @@ export const ExtrudeGeometry = jest.fn(() => ({
     center: jest.fn(),
     dispose: jest.fn()
 }));
-export const Quaternion = jest.fn(() => ({ set: jest.fn(), copy: jest.fn() }));
+export const Quaternion = jest.fn(() => ({ 
+    set: jest.fn(), 
+    copy: jest.fn(),
+    setFromEuler: jest.fn().mockReturnThis() 
+}));
 export const Vector3 = jest.fn(() => ({ set: jest.fn(), copy: jest.fn(), sub: jest.fn(() => ({ lengthSq: jest.fn(() => 0) })) }));
+export const Euler = jest.fn();
 export const Raycaster = jest.fn(() => ({
     setFromCamera: jest.fn(),
     intersectObjects: jest.fn(() => [])
 }));
 export const Vector2 = jest.fn(() => ({ set: jest.fn() }));
 export const AdditiveBlending = 1;
+export const AudioListener = jest.fn(() => ({
+    position: { set: jest.fn() },
+    rotation: { set: jest.fn() }
+}));
+export const Audio = jest.fn(() => ({
+    setBuffer: jest.fn(),
+    setLoop: jest.fn(),
+    setVolume: jest.fn(),
+    play: jest.fn(),
+    stop: jest.fn(),
+    isPlaying: false
+}));
+export const AudioLoader = jest.fn(() => ({
+    load: jest.fn()
+}));
+

@@ -6,6 +6,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import * as RAPIER from '@dimforge/rapier3d-compat';
 
 let scene, camera, renderer, starfield, world, spawnInterval, raycaster, composer;
+let listener, ambientMusic, collisionSound;
 const mouse = new THREE.Vector2();
 const hearts = new Map(); // Map Three.js mesh to Rapier rigid body
 const sparkles = [];
@@ -28,6 +29,11 @@ export async function init() {
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 5, 10);
     camera.lookAt(0, 0, 0);
+
+    // Audio
+    listener = new THREE.AudioListener();
+    camera.add(listener);
+    initAudio();
 
     // Renderer
     renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -79,6 +85,28 @@ export async function init() {
     console.log('Valentine Card Initialized');
 }
 
+function initAudio() {
+    const audioLoader = new THREE.AudioLoader();
+    
+    // Ambient Music
+    ambientMusic = new THREE.Audio(listener);
+    // Placeholder URL for ambient music
+    audioLoader.load('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', (buffer) => {
+        ambientMusic.setBuffer(buffer);
+        ambientMusic.setLoop(true);
+        ambientMusic.setVolume(0.3);
+        // Browser requires user interaction to play audio, handled in onClick
+    });
+
+    // Collision SFX
+    collisionSound = new THREE.Audio(listener);
+    // Placeholder URL for collision sound
+    audioLoader.load('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3', (buffer) => {
+        collisionSound.setBuffer(buffer);
+        collisionSound.setVolume(0.5);
+    });
+}
+
 function createStarfield() {
     const geometry = new THREE.BufferGeometry();
     const vertices = [];
@@ -124,7 +152,6 @@ function spawnHeart() {
     const y = 10;
     const z = THREE.MathUtils.randFloatSpread(4);
 
-    // Random initial orientation
     const randRot = new THREE.Euler(
         Math.random() * Math.PI * 2,
         Math.random() * Math.PI * 2,
@@ -151,7 +178,6 @@ function spawnHeart() {
         .setRotation({ x: quaternion.x, y: quaternion.y, z: quaternion.z, w: quaternion.w });
     const rigidBody = world.createRigidBody(rigidBodyDesc);
 
-    // Increased ball radius to 0.6 to better encompass the heart's vertices and prevent penetration
     const colliderDesc = RAPIER.ColliderDesc.ball(0.6).setRestitution(0.7).setFriction(0.5);
     world.createCollider(colliderDesc, rigidBody);
 
@@ -160,6 +186,11 @@ function spawnHeart() {
 
 function onClick(event) {
     if (!raycaster) return;
+
+    // Start music on first click (browser policy)
+    if (ambientMusic && !ambientMusic.isPlaying) {
+        ambientMusic.play();
+    }
     
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -209,6 +240,9 @@ function createSparkles(position) {
 function animate() {
     if (world) {
         world.step();
+        
+        // Optional: Collision sound logic would go here if Rapier events are used
+        // For simplicity in this card, we'll focus on the ambient music.
     }
 
     // Sync Hearts
