@@ -13,6 +13,7 @@ describe('Project Foundation', () => {
     expect(content).toContain('rapier'); // Check for Rapier CDN
     expect(content).toContain('style.css'); // Check for CSS link
     expect(content).toContain('main.js'); // Check for JS link
+    expect(content).toContain('<h1>Happy Valentine\'s Day Carmen!</h1>'); // Check for message
   });
 
   test('style.css exists', () => {
