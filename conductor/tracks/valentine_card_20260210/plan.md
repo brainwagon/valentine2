@@ -32,7 +32,7 @@ This plan outlines the steps to build the interactive Valentine's Day card.
     - [x] Add logic to delete hearts and their physics bodies when they fall below a certain height.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Physics Integration & Core Mechanics' (Protocol in workflow.md) 44b29bd
 
-## Phase 3: Interactivity & Visual Effects
+## Phase 3: Interactivity & Visual Effects [checkpoint: 038d532]
 - [x] Task: Implement Clicking/Sparkle Effect f2e5332
     - [x] Implement raycasting to detect clicks near hearts.
     - [x] Create a particle-based sparkle effect triggered on click.
@@ -41,7 +41,7 @@ This plan outlines the steps to build the interactive Valentine's Day card.
 - [x] Task: UI & Personalized Message 852d4b0
     - [x] Add "Happy Valentine's Day Carmen!" message using HTML/CSS.
     - [x] Apply whimsical styling and positioning.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Interactivity & Visual Effects' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Interactivity & Visual Effects' (Protocol in workflow.md) 038d532
 
 ## Phase 4: Audio & Polishing
 - [ ] Task: Add Ambient Music & SFX
