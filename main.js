@@ -157,16 +157,21 @@ function createStarfield() {
 }
 
 function createPlatform() {
-    const size = 5;
-    const thickness = 0.5;
-    const geometry = new THREE.BoxGeometry(size, thickness, size);
-    const material = new THREE.MeshStandardMaterial({ color: 0xffaaaa });
+    const radius = 4;
+    // Semi-sphere (bottom hemisphere) to act as a bowl
+    const geometry = new THREE.SphereGeometry(radius, 32, 20, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2);
+    const material = new THREE.MeshStandardMaterial({ color: 0xffaaaa, side: THREE.DoubleSide });
     const platformMesh = new THREE.Mesh(geometry, material);
+    platformMesh.position.y = -2;
     scene.add(platformMesh);
 
-    const rigidBodyDesc = RAPIER.RigidBodyDesc.fixed();
+    const rigidBodyDesc = RAPIER.RigidBodyDesc.fixed()
+        .setTranslation(0, -2, 0);
     const rigidBody = world.createRigidBody(rigidBodyDesc);
-    const colliderDesc = RAPIER.ColliderDesc.cuboid(size / 2, thickness / 2, size / 2)
+    
+    const vertices = geometry.attributes.position.array;
+    const indices = geometry.index.array;
+    const colliderDesc = RAPIER.ColliderDesc.trimesh(vertices, indices)
         .setRestitution(0.8)
         .setFriction(0.5)
         .setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS);

@@ -34,4 +34,5 @@ export const RigidBodyDesc = {
 export const ColliderDesc = {
     cuboid: jest.fn(() => mockDesc),
     ball: jest.fn(() => mockDesc),
+    trimesh: jest.fn(() => mockDesc),
 };

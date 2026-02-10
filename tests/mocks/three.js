@@ -35,6 +35,21 @@ export const BoxGeometry = jest.fn(() => ({
     center: jest.fn(),
     dispose: jest.fn()
 }));
+export const SphereGeometry = jest.fn(() => ({
+    center: jest.fn(),
+    dispose: jest.fn(),
+    computeVertexNormals: jest.fn(),
+    attributes: {
+        position: {
+            array: new Float32Array([0, 0, 0, 1, 0, 0, 0, 1, 0]),
+            count: 3
+        }
+    },
+    index: {
+        array: new Uint32Array([0, 1, 2]),
+        count: 3
+    }
+}));
 export const PlaneGeometry = jest.fn();
 export const MeshStandardMaterial = jest.fn(() => ({
     dispose: jest.fn()

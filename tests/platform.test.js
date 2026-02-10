@@ -8,11 +8,11 @@ describe('Platform Creation', () => {
     jest.clearAllMocks();
   });
 
-  test('creates a Three.js platform and a Rapier rigid body', async () => {
+  test('creates a bowl-shaped platform and a Rapier trimesh collider', async () => {
     await init();
 
     // Three.js
-    expect(THREE.BoxGeometry).toHaveBeenCalledWith(5, 0.5, 5);
+    expect(THREE.SphereGeometry).toHaveBeenCalled();
     expect(THREE.Mesh).toHaveBeenCalled();
     const sceneInstance = THREE.Scene.mock.results[0].value;
     expect(sceneInstance.add).toHaveBeenCalledWith(expect.any(Object));
@@ -21,7 +21,7 @@ describe('Platform Creation', () => {
     expect(RAPIER.RigidBodyDesc.fixed).toHaveBeenCalled();
     const worldInstance = RAPIER.World.mock.results[0].value;
     expect(worldInstance.createRigidBody).toHaveBeenCalled();
-    expect(RAPIER.ColliderDesc.cuboid).toHaveBeenCalledWith(2.5, 0.25, 2.5);
+    expect(RAPIER.ColliderDesc.trimesh).toHaveBeenCalled();
     expect(worldInstance.createCollider).toHaveBeenCalled();
   });
 });
