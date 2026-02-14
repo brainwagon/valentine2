@@ -45,8 +45,8 @@ describe('Interactivity: Clicking & Sparkles', () => {
     window.dispatchEvent(new MouseEvent('click'));
 
     // Verify Points (sparkles) were created
-    // The first Points call is for starfield, the second should be for sparkles
-    expect(THREE.Points).toHaveBeenCalledTimes(2);
+    // The starfield now uses InstancedMesh, so Points is only for sparkles
+    expect(THREE.Points).toHaveBeenCalledTimes(1);
     
     const sceneInstance = THREE.Scene.mock.results[0].value;
     expect(sceneInstance.add).toHaveBeenCalledTimes(5); // ambient, dir, starfield, platform, sparkles

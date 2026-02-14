@@ -14,13 +14,31 @@
             }
         }
     </script>
-    <style>
-        body { margin: 0; overflow: hidden; }
-    </style>
 </head>
 <body>
     <div id="ui">
         <h1>Happy Valentine's Day Carmen!</h1>
+        <div id="audio-controls">
+            <button id="rewind-button" title="Rewind">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9.195 18.44c1.25.713 2.805-.19 2.805-1.629v-2.34l6.945 3.968c1.25.714 2.805-.188 2.805-1.628V5.19c0-1.44-1.555-2.343-2.805-1.628L12 7.53V5.191c0-1.44-1.555-2.343-2.805-1.628l-7.108 4.061c-1.26.72-1.26 2.536 0 3.256l7.108 4.061Z" />
+                </svg>
+            </button>
+            <button id="stop-button" title="Stop">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4.5 7.5a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-9a3 3 0 0 1-3-3v-9Z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            <button id="play-pause-button" title="Play/Pause">
+                <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4.5 5.653c0-1.427 1.556-2.333 2.78-1.613l12.14 7.026c1.242.721 1.242 2.504 0 3.225l-12.14 7.026c-1.224.72-2.78-.186-2.78-1.613V5.653Z" clip-rule="evenodd" />
+                </svg>
+                <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+                    <path fill-rule="evenodd" d="M6.75 5.25a.75.75 0 0 1 .75.75v12a.75.75 0 0 1-1.5 0v-12a.75.75 0 0 1 .75-.75Zm7.5 0a.75.75 0 0 1 .75.75v12a.75.75 0 0 1-1.5 0v-12a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+        <h2 id="footer">All my love, Mark</h2>
     </div>
     <script type="module">
         import { init } from './main.js';

@@ -7,6 +7,7 @@ export const Audio = jest.fn(() => ({
     setLoop: jest.fn(),
     setVolume: jest.fn(),
     play: jest.fn(),
+    pause: jest.fn(),
     stop: jest.fn(),
     isPlaying: false
 }));

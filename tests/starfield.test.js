@@ -7,19 +7,18 @@ describe('Starfield Background', () => {
     jest.clearAllMocks();
   });
 
-  test('creates a starfield (Points) and adds it to the scene', async () => {
+  test('creates a starfield (InstancedMesh) and adds it to the scene', async () => {
     await init();
 
-    // Verify Points creation
-    expect(THREE.Points).toHaveBeenCalled();
-    expect(THREE.BufferGeometry).toHaveBeenCalled();
-    expect(THREE.PointsMaterial).toHaveBeenCalled();
+    // Verify InstancedMesh creation
+    expect(THREE.InstancedMesh).toHaveBeenCalled();
+    expect(THREE.ShapeGeometry).toHaveBeenCalled();
+    expect(THREE.MeshBasicMaterial).toHaveBeenCalledWith(expect.objectContaining({ color: 0xffff00 }));
 
     // Verify it was added to the scene
-    // We need to capture the scene instance created in init
     const sceneInstance = THREE.Scene.mock.results[0].value;
-    const pointsInstance = THREE.Points.mock.instances[0];
-    expect(sceneInstance.add).toHaveBeenCalledWith(pointsInstance);
+    const starfieldInstance = THREE.InstancedMesh.mock.instances[0];
+    expect(sceneInstance.add).toHaveBeenCalledWith(starfieldInstance);
   });
 
   test('sets up animation loop', async () => {
